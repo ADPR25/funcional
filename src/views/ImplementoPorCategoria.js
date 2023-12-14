@@ -78,31 +78,33 @@ const ImplementoPorCategoria = () => {
 
     return (
         <RootContainer>
-            <Typography variant="h4">Implementos por Categoría</Typography>
-
-            <FormContainer>
-                <InputLabel htmlFor="categoria">Selecciona una categoría:</InputLabel>
-                <Select
-                    label="Selecciona una categoría"
-                    id="categoria"
-                    value={selectedCategoria}
-                    onChange={(e) => setSelectedCategoria(e.target.value)}
+            <center>
+                <Typography variant="h4">Implementos por Categoría</Typography>
+                <br /><br />
+                <FormContainer>
+                    <InputLabel htmlFor="categoria">Selecciona una categoría:</InputLabel>
+                    <Select
+                        label="Selecciona una categoría"
+                        id="categoria"
+                        value={selectedCategoria}
+                        onChange={(e) => setSelectedCategoria(e.target.value)}
+                    >
+                        <MenuItem value="" disabled>Selecciona una categoría</MenuItem>
+                        {categoriaData.map((cat) => (
+                            <MenuItem key={cat._id} value={cat._id}>{cat.nombre}</MenuItem>
+                        ))}
+                    </Select>
+                </FormContainer>
+                <br />
+                <ActionButton
+                    variant="contained"
+                    color="primary"
+                    onClick={handleFetchImplementos}
                 >
-                    <MenuItem value="" disabled>Selecciona una categoría</MenuItem>
-                    {categoriaData.map((cat) => (
-                        <MenuItem key={cat._id} value={cat._id}>{cat.nombre}</MenuItem>
-                    ))}
-                </Select>
-            </FormContainer>
-
-            <ActionButton
-                variant="contained"
-                color="primary"
-                onClick={handleFetchImplementos}
-            >
-                Obtener Implementos
-            </ActionButton>
-
+                    Obtener Implementos
+                </ActionButton>
+            </center>
+            <br /> <br />
             {implementoData.length > 0 && (
                 <TableContainer>
                     <Table>
