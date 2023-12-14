@@ -1,70 +1,53 @@
-import React, { useState, useEffect } from 'react';
-import { obtenerFichas } from '../api/apis.ts';
+import React, { useState } from 'react';
+import { Button, Table, TableContainer, TableHead, TableRow, TableCell, TableBody, Paper } from '@mui/material';
 
 const ObtenerFichas = () => {
     const [fichas, setFichas] = useState([]);
-    const [showTable, setShowTable] = useState(false);
-    const [error, setError] = useState(null);
+    const [mostrarTabla, setMostrarTabla] = useState(false);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await obtenerFichas();
-
-                // Verificar si la respuesta contiene un estado (status)
-                if (response && response.status === 200) {
-                    const data = await response.json();
-                    setFichas(data);
-                } else {
-                    setError('Error al obtener las fichas');
-                }
-            } catch (error) {
-                setError('Error al obtener las fichas');
-                console.error(error.message);
-            }
-        };
-
-        fetchData();
-    }, []);
-
-    const handleMostrarTabla = () => {
-        setShowTable(true);
-        console.log('showTable:', showTable); // Agrega esta línea para verificar
+    const obtenerFichas = async () => {
+        try {
+            const response = await fetch('https://proyecto-backend-sgbienestar.onrender.com/ficha');
+            const data = await response.json();
+            setFichas(data);
+            setMostrarTabla(true);
+        } catch (error) {
+            console.error('Error al obtener las fichas:', error.message);
+        }
     };
-
 
     return (
         <div>
-            <h2>Lista de Fichas</h2>
-            <button onClick={handleMostrarTabla}>Mostrar Tabla</button>
-
-            {error && <p>{error}</p>}
-
-            {showTable && (
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Código</th>
-                            <th>Nombre del Programa</th>
-                            <th>Nivel</th>
-                            <th>Fecha de Inicio</th>
-                            <th>Fecha de Fin</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {fichas.map((ficha) => (
-                            <tr key={ficha._id}>
-                                <td>{ficha._id}</td>
-                                <td>{ficha.codigo}</td>
-                                <td>{ficha.programa.nombre}</td>
-                                <td>{ficha.programa.nivel.nombre}</td>
-                                <td>{new Date(ficha.fecha_inicio).toLocaleDateString()}</td>
-                                <td>{new Date(ficha.fecha_fin).toLocaleDateString()}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+            <br />
+            <center>
+                <Button variant="contained" color="primary" onClick={obtenerFichas}>
+                    Obtener Fichas
+                </Button>
+            </center>
+            <br />
+            {mostrarTabla && (
+                <TableContainer component={Paper}>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Código</TableCell>
+                                <TableCell>Programa</TableCell>
+                                <TableCell>Fecha de Inicio</TableCell>
+                                <TableCell>Fecha de Fin</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {fichas.map((ficha) => (
+                                <TableRow key={ficha._id}>
+                                    <TableCell>{ficha.codigo}</TableCell>
+                                    <TableCell>{ficha.programa.nombre}</TableCell>
+                                    <TableCell>{ficha.fecha_inicio}</TableCell>
+                                    <TableCell>{ficha.fecha_fin}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
             )}
         </div>
     );
