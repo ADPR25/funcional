@@ -9,20 +9,12 @@ import EnviarCorreo from './views/EnviarCorreo';
 const Routes = () => {
     return (
         <Router>
-            <Switch>
-                <Route path="/implemento-por-categoria">
-                    <ImplementoPorCategoria />
-                </Route>
-                <Route path="/obtener-fichas">
-                    <ObtenerFichas />
-                </Route>
-                <Route path="/enviar-correo">
-                    <EnviarCorreo />
-                </Route>
-                <Route path="/">
-                    <App />
-                </Route>
-            </Switch>
+            <Routes>
+                <Route path="/implemento-por-categoria" element={<ImplementoPorCategoria />} />
+                <Route path="/obtener-fichas" element={<ObtenerFichas />} />
+                <Route path="/enviar-correo" element={<EnviarCorreo />} />
+                <Route path="/" element={<App />} />
+            </Routes>
         </Router>
     );
 };
