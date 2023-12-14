@@ -63,3 +63,39 @@ export async function obtenerProgramaDeFormacion(req: Request, res: Response) {
     res.status(500).json({ error: `Error al obtener el programa de formación: ${error.message}` });
   }
 }
+
+
+
+export async function categoria() {
+  const url = 'https://proyecto-backend-sgbienestar.onrender.com/categoria'
+
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`No se pudo obtener : ${response.status}`);
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw new Error(`no se pueden: ${error.message}, ${error.status}`);
+  }
+
+}
+
+
+
+export async function obtener_inplemeto_id(id) {
+  const url = `https://proyecto-backend-sgbienestar.onrender.com/implementos/categoria/${id}`
+
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`No se pudo obtener la lista de implemento. Estado de respuesta: ${response.status}`);
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw new Error(`no se pueden cargar los datos de los implemento: ${error.message}, ${error.status}`);
+  }
+
+}

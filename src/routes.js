@@ -1,12 +1,11 @@
 import React from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
-import { Routes as Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';  // Modificado: Quité 'as Switch'
 import App from './App';
 import ImplementoPorCategoria from './views/ImplementoPorCategoria';
 import ObtenerFichas from './views/ObtenerFichas';
 import EnviarCorreo from './views/EnviarCorreo';
 
-const Routes = () => {
+const MainRoutes = () => {
     return (
         <Router>
             <Routes>
@@ -19,4 +18,4 @@ const Routes = () => {
     );
 };
 
-export default Routes;
+export default MainRoutes;
