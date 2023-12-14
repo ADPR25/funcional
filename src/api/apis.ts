@@ -63,3 +63,36 @@ export async function obtener_inplemeto_id(id) {
   }
 
 }
+
+
+
+const API = 'https://proyecto-backend-sgbienestar.onrender.com/tipo-informe';
+
+export const informes = async () => {
+  try {
+    const response = await fetch(API, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      // Si la respuesta no es exitosa, arrojamos un error con detalles del servidor
+      const errorDetails = await response.json();
+      throw new Error('Error en la solicitud. Detalles: ' + JSON.stringify(errorDetails));
+    }
+
+    const data = await response.json();
+
+    // Aquí puedes realizar más validaciones específicas de tu aplicación
+
+    return data;
+  } catch (error) {
+    console.error('Error en la función informes:', error);
+
+    // Devolvemos un objeto de error con el mensaje de la excepción
+    return { error: 'Error al obtener los informes', details: error.message };
+  }
+};
+
