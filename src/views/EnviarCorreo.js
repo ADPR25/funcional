@@ -1,34 +1,80 @@
 import React, { useState } from 'react';
-import { enviarCorreo } from '../api/apis.ts';
+import { TextField, Button, Snackbar } from '@mui/material';
 
 const EnviarCorreo = () => {
-    const [destinatarios, setDestinatarios] = useState('');
+    const [correo, setCorreos] = useState([]);
     const [mensaje, setMensaje] = useState('');
     const [asunto, setAsunto] = useState('');
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState('');
 
-    const handleEnviarCorreo = async () => {
+    const handleSubmit = async () => {
         try {
-            await enviarCorreo({
-                destinatarios: destinatarios.split(','),
-                mensaje,
-                asunto,
+            const response = await fetch('https://proyecto-backend-sgbienestar.onrender.com/mail', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    correo,
+                    mensaje,
+                    asunto,
+                }),
             });
-            alert('Correo enviado correctamente');
+
+            if (!response.ok) {
+                throw new Error(`Error en la solicitud: ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            setSnackbarMessage(data.message);
+            setOpenSnackbar(true);
         } catch (error) {
-            console.error(error.message);
+            setSnackbarMessage(`Error al enviar el correo: ${error.message}`);
+            setOpenSnackbar(true);
         }
     };
 
+    const handleSnackbarClose = () => {
+        setOpenSnackbar(false);
+    };
+
     return (
-        <div>
-            <h2>Enviar Correo</h2>
-            <label>Destinatarios:</label>
-            <input type="text" value={destinatarios} onChange={(e) => setDestinatarios(e.target.value)} />
-            <label>Mensaje:</label>
-            <textarea value={mensaje} onChange={(e) => setMensaje(e.target.value)} />
-            <label>Asunto:</label>
-            <input type="text" value={asunto} onChange={(e) => setAsunto(e.target.value)} />
-            <button onClick={handleEnviarCorreo}>Enviar Correo</button>
+        <div style={{ maxWidth: '400px', margin: 'auto', padding: '20px' }}>
+            <TextField
+                label="Correos (separados por comas)"
+                value={correo.join(',')}
+                onChange={(e) => setCorreos(e.target.value.split(','))}
+                fullWidth
+                margin="normal"
+            />
+            <TextField
+                label="Asunto"
+                value={asunto}
+                onChange={(e) => setAsunto(e.target.value)}
+                fullWidth
+                margin="normal"
+            />
+            <TextField
+                label="Mensaje"
+                value={mensaje}
+                onChange={(e) => setMensaje(e.target.value)}
+                fullWidth
+                multiline
+                rows={4}
+                margin="normal"
+            />
+            <div style={{ textAlign: 'center', marginTop: '20px' }}>
+                <Button variant="contained" color="primary" onClick={handleSubmit}>
+                    Enviar Correo
+                </Button>
+            </div>
+            <Snackbar
+                open={openSnackbar}
+                autoHideDuration={6000}
+                onClose={handleSnackbarClose}
+                message={snackbarMessage}
+            />
         </div>
     );
 };

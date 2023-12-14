@@ -27,30 +27,7 @@ export async function obtenerFichas(req: Request, res: Response) {
   }
 }
 
-export async function enviarCorreo(req: Request, res: Response) {
-  const url = `${BASE_URL}/mail`;
 
-  const correoData = {
-    correo: ['destinatario1@example.com', 'destinatario2@example.com'],
-    mensaje: 'Contenido del mensaje',
-    asunto: 'Asunto del correo',
-  };
-
-  try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(correoData),
-    });
-
-    const data = await response.json();
-    res.status(response.status).json(data);
-  } catch (error) {
-    res.status(500).json({ error: `Error al enviar el correo: ${error.message}` });
-  }
-}
 
 export async function obtenerProgramaDeFormacion(req: Request, res: Response) {
   const url = `${BASE_URL}/programa/programa`;
@@ -98,4 +75,33 @@ export async function obtener_inplemeto_id(id) {
     throw new Error(`no se pueden cargar los datos de los implemento: ${error.message}, ${error.status}`);
   }
 
+}
+
+export async function enviarCorreo(req: Request, res: Response) {
+  const url = `https://proyecto-backend-sgbienestar.onrender.com/mail`;
+  console.log('Datos recibidos:', req.body);
+  try {
+    const { correo, mensaje, asunto } = req.body;
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        correo,
+        mensaje,
+        asunto,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error en la solicitud: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    res.status(response.status).json(data);
+  } catch (error) {
+    res.status(500).json({ error: `Error al enviar el correo: ${error.message}` });
+  }
 }
