@@ -112,7 +112,6 @@ const ImplementoPorCategoria = () => {
                             <TableRow>
                                 <TableCell>ID</TableCell>
                                 <TableCell>Nombre del Implemento</TableCell>
-                                {/* Add more columns as needed */}
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -120,7 +119,6 @@ const ImplementoPorCategoria = () => {
                                 <TableRow key={implemento._id}>
                                     <TableCell>{implemento._id}</TableCell>
                                     <TableCell>{implemento.nombre}</TableCell>
-                                    {/* Add more cells as needed */}
                                 </TableRow>
                             ))}
                         </TableBody>
